@@ -20,4 +20,11 @@ export class AuthService {
   getData() {
     return true;
   }
+
+  registerUser(username, password): Observable<any> {
+    return this.http.post('/api/register', {
+      username,
+      password
+    })
+  }
 }

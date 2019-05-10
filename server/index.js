@@ -11,3 +11,8 @@ app.listen(1234, "localhost", () => console.log("Server listening at localhost:1
 app.get('/api/isLoggedIn', (request, response) => {
     return response.json({ status: false })
 })
+
+app.post('/api/register', (request, response) => {
+    const body = request.body
+    return response.json( { username: body.username, password: body.password } )
+})

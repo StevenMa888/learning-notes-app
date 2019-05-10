@@ -1,3 +1,6 @@
-<p>
-  register works!
-</p>
+<form (submit)="registerUser($event)">
+    <fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username"><br/>
+    <fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"><br/>
+    <fa-icon icon="lock"></fa-icon><input type="password" id="confirm_password" placeholder="confirm password"><br/>
+    <input type="submit" value="REGISTER">
+  </form>
