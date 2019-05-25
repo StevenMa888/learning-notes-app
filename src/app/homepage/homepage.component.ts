@@ -11,9 +11,7 @@ import { map } from 'rxjs/operators';
 export class HomepageComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) {
-    if (this.auth.getData()) {
-      console.log("success")
-    }
+    
   }
 
   ngOnInit() {

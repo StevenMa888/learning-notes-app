@@ -13,12 +13,19 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  getIsLoggedIn(): Observable<isLoggedIn> {
-    return this.http.get<isLoggedIn>('/api/isLoggedIn')
+  getIsLoggedIn(): boolean {
+    return JSON.parse(localStorage.getItem('loggedIn'))
   }
 
-  getData() {
-    return true;
+  setLoggedInStatus(status: boolean) {
+    localStorage.setItem('loggedIn', status.toString())
+  }
+
+  getUserDetails(username, password): Observable<any> {
+    return this.http.post('/api/user', {
+      username,
+      password
+    })
   }
 
   registerUser(username, password): Observable<any> {

@@ -16,9 +16,9 @@ export class RegisterComponent implements OnInit {
   registerUser(event) {
     event.preventDefault()
     const target = event.target
-    const username = target.querySelector('#username').value
-    const password = target.querySelector('#password').value
-    const confirmPassword = target.querySelector('#confirm_password').value
+    let username = target.querySelector('#username').value
+    let password = target.querySelector('#password').value
+    let confirmPassword = target.querySelector('#confirm_password').value
 
     if (password !== confirmPassword) {
       alert("Your two passwords don't match!")
