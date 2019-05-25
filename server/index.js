@@ -14,28 +14,25 @@ app.use(bodyParser.json())
 
 app.listen(1234, "localhost", () => console.log("Server listening at localhost:1234"))
 
-app.post('/api/user', async (request, response) => {
+app.post('/api/checkUser', async (request, response) => {
     let {username, password} = request.body
     let result = await User.findOne({username, password})
     if (result) {
-        return response.json({success: true})
+        response.send({success: true, message: 'User found!'})
     } else {
-        return response.json({success: false})
+        response.send({success: false, message: 'User does not exist!'})
     }
 })
 
-app.post('/api/register', (request, response) => {
+app.post('/api/register', async (request, response) => {
     let {username, password} = request.body
+    if (await User.findOne({username})) {
+        return response.json({success: false, message: 'User already exists!'})
+    }
     let user = new  User({
-        username: username,
-        password: password
+        username,
+        password
     })
-    user.save(function(err, res) {
-        if (err) {
-            console.log("Error:" + err);
-        } else {
-            console.log("Res:" + res);
-        }
-    })
-    return response.json({success: true})
+    await user.save()
+    response.send({success: true, message: 'User has been successfully registered!'})
 })

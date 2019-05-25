@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-homepage',
@@ -10,11 +11,16 @@ import { map } from 'rxjs/operators';
 })
 export class HomepageComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private user: UserService, private router: Router) {
     
   }
 
   ngOnInit() {
+  }
+
+  logoutUser() {
+    this.user.removeLoggedIn();
+    this.router.navigate(['login'])
   }
 
 }

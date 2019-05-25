@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 interface isLoggedIn {
   status: boolean
@@ -11,18 +12,14 @@ interface isLoggedIn {
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private user: UserService) { }
 
   getIsLoggedIn(): boolean {
-    return JSON.parse(localStorage.getItem('loggedIn'))
+    return this.user.getIsLoggedIn()
   }
 
-  setLoggedInStatus(status: boolean) {
-    localStorage.setItem('loggedIn', status.toString())
-  }
-
-  getUserDetails(username, password): Observable<any> {
-    return this.http.post('/api/user', {
+  checkUser(username, password): Observable<any> {
+    return this.http.post('/api/checkUser', {
       username,
       password
     })
