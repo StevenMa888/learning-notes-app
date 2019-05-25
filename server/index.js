@@ -18,21 +18,22 @@ app.post('/api/checkUser', async (request, response) => {
     let {username, password} = request.body
     let result = await User.findOne({username, password})
     if (result) {
-        response.send({success: true, message: 'User found!'})
+        response.json({success: true, message: 'User found!'})
     } else {
-        response.send({success: false, message: 'User does not exist!'})
+        response.json({success: false, message: 'User does not exist!'})
     }
 })
 
 app.post('/api/register', async (request, response) => {
     let {username, password} = request.body
     if (await User.findOne({username})) {
-        return response.json({success: false, message: 'User already exists!'})
+        response.json({success: false, message: 'User already exists!'})
+        return
     }
     let user = new  User({
         username,
         password
     })
     await user.save()
-    response.send({success: true, message: 'User has been successfully registered!'})
+    response.json({success: true, message: 'User has been successfully registered!'})
 })
