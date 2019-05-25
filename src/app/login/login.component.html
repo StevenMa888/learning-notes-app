@@ -1,5 +1,26 @@
-<form>
-  <fa-icon icon="user"></fa-icon><input type="text"/><br/>
-  <fa-icon icon="lock"></fa-icon><input type="password"><br/>
-  <input type="submit" value="LOGIN">
-</form>
+<div class="sign">
+    <div class="main">
+      <h4 class="title">
+        <div>
+          <a routerLink="/login" class="active">LOGIN</a>
+          <b></b>
+          <a routerLink="/register">REGISTER</a>
+        </div>
+      </h4>
+      <div>
+        <form (submit)="login($event)">
+          <div class="input-prepend"><fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username"></div> 
+          <div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"></div>
+        
+          <div class="remember-button">
+            <input type="checkbox" value="true" checked="checked">
+            <span>Remember Me</span>
+          </div>
+          <div class="forget-button">
+            <a>Having problem to login?</a>
+          </div>
+          <input type="submit" class="login-button" value="LOGIN">
+        </form>
+      </div>
+    </div>
+  </div>
