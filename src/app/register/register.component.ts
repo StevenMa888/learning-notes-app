@@ -26,6 +26,11 @@ export class RegisterComponent implements OnInit {
       return
     }
 
+    if (password.length < 6) {
+      alert("Your password needs at least 6 digits or characters!")
+      return
+    }
+
     this.auth.registerUser(username, password).subscribe( data => {
       if (data.success) {
         alert("You have been successfully registered, please login")

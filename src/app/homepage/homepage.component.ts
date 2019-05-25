@@ -11,7 +11,7 @@ import { UserService } from '../user.service';
 })
 export class HomepageComponent implements OnInit {
 
-  constructor(private auth: AuthService, private user: UserService, private router: Router) {
+  constructor(private auth: AuthService) {
     
   }
 
@@ -19,8 +19,7 @@ export class HomepageComponent implements OnInit {
   }
 
   logoutUser() {
-    this.user.removeLoggedIn();
-    this.router.navigate(['login'])
+    this.auth.logoutUser()
   }
 
 }

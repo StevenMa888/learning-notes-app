@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     let password = target.querySelector('#password').value
     this.auth.checkUser(username, password).subscribe(data => {
       if (data.success) {
-        this.user.setLoggedIn(true);
+        this.user.setLoggedInUser(username);
         this.router.navigate([''])
       } else {
         alert("Username or password is incorrect, please try again")
