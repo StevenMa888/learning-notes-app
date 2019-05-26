@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 app.listen(1234, "localhost", () => console.log("Server listening at localhost:1234"))
 
 app.post('/api/isLoggedIn', (request, response) => {
-    let username = request.body.username
+    const username = request.body.username
     if (request.session && request.session.username == username) {
         response.json(request.session.auth || false)
     } else {
@@ -24,7 +24,7 @@ app.post('/api/isLoggedIn', (request, response) => {
 })
 
 app.post('/api/logout', (request, response) => {
-    let username = request.body.username
+    const username = request.body.username
     if (request.session && request.session.username == username) {
         request.session.destroy((success) => {
             response.json({success: true, message: "User logout!"})
@@ -37,8 +37,8 @@ app.post('/api/logout', (request, response) => {
 })
 
 app.post('/api/checkUser', async (request, response) => {
-    let {username, password} = request.body
-    let result = await User.findOne({username, password})
+    const {username, password} = request.body
+    const result = await User.findOne({username, password})
     if (result) {
         response.json({success: true, message: 'User found!'})
         request.session.username = username
@@ -50,12 +50,12 @@ app.post('/api/checkUser', async (request, response) => {
 })
 
 app.post('/api/register', async (request, response) => {
-    let {username, password} = request.body
+    const {username, password} = request.body
     if (await User.findOne({username})) {
         response.json({success: false, message: 'User already exists!'})
         return
     }
-    let user = new  User({
+    const user = new  User({
         username,
         password
     })
