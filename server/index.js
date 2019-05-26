@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 app.listen(1234, "localhost", () => console.log("Server listening at localhost:1234"))
 
 app.post('/api/isLoggedIn', (request, response) => {
-    const username = request.body.username
+    const {username} = request.body
     if (request.session && request.session.username == username) {
         response.json(request.session.auth || false)
     } else {
@@ -24,9 +24,9 @@ app.post('/api/isLoggedIn', (request, response) => {
 })
 
 app.post('/api/logout', (request, response) => {
-    const username = request.body.username
+    const {username} = request.body
     if (request.session && request.session.username == username) {
-        request.session.destroy((success) => {
+        request.session.destroy(_ => {
             response.json({success: true, message: "User logout!"})
         }, (err) => {
             response.json({success: false, message: "User failed to logout!"})
@@ -59,7 +59,7 @@ app.post('/api/register', async (request, response) => {
         username,
         password
     })
-    await user.save((success) => {
+    await user.save(_ => {
         response.json({success: true, message: "User has been successfully registered!"})
     }, (err) => {
         response.json({success: false, message: "User failed to register!"})
