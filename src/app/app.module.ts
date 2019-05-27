@@ -11,13 +11,15 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { HomepageComponent } from './homepage/homepage.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomepageComponent
+    HomepageComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

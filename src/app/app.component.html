@@ -1,11 +1,7 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    {{ title }}
-  </h1>
-</div>
-<ul>
-
-</ul>
-
+<app-header *ngIf="getIsLoggedIn();else isNotLoggedIn"></app-header>
+<ng-template #isNotLoggedIn>
+  <div class="logo">
+    {{ logo }}
+  </div>
+</ng-template>
 <router-outlet></router-outlet>
