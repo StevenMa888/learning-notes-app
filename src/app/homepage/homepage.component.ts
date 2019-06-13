@@ -11,15 +11,9 @@ import { UserService } from '../user.service';
 })
 export class HomepageComponent implements OnInit {
 
-  constructor(private auth: AuthService) {
-    
-  }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  logoutUser() {
-    this.auth.logoutUser()
   }
 
 }
