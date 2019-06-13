@@ -1,6 +1,4 @@
-*, :after, :before {
-    box-sizing: border-box;
-}
+@import "../../variables.scss";
 
 .sign {
     display: block;
@@ -38,8 +36,8 @@
 
             .active {
                 font-weight: 700;
-                color: #ea6f5a;
-                border-bottom: 2px solid #ea6f5a;
+                color: $orange;
+                border-bottom: 2px solid $orange;
             }
         }
 
