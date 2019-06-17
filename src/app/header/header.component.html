@@ -2,13 +2,13 @@
   <div class="logo">Learning Notes</div>
   <div class="user">
     <div data-hover="dropdown">
-      <a  class="avatar" href="/">
+      <a  class="avatar" href="/user">
         <img [src]="avatarUrl">
       </a>
     </div>
     <ul class="dropdown-menu">
       <li>
-        <a><fa-icon icon="user"></fa-icon>My Page</a>
+        <a routerLink="/user"><fa-icon icon="user"></fa-icon>My Page</a>
       </li>
       <li>
         <a (click)="logoutUser()"><fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>Logout</a>
