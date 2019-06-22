@@ -6,7 +6,7 @@ declare var $: any;
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit {
 
@@ -17,15 +17,11 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    $("[data-hover]").dropdownHover()
+
   }
 
   logoutUser() {
     this.auth.logoutUser()
-  }
-
-  log() {
-    console.log(123)
   }
 
 }

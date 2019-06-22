@@ -1,0 +1,53 @@
+@import "../../variables.less";
+@import "../../theme.less";
+
+.header {
+    position: fixed;
+    width: 100%;
+    height: 56px;
+    top: 0;
+}
+
+.logo {
+    color: #ea6f5a;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: serif;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+.user {
+    float: right;
+    height: 100%;
+
+    .avatar {
+        display: block;
+        position: relative;
+        color: @text-color;
+        width: @menu-collapsed-width;
+        margin: 3px 0;
+        text-align: right;
+
+        img {
+            display: inline-block;
+            height: 50px;
+            width: 50px;
+            border-radius: 50px;
+        }
+    }
+}
+
+.avatar-dropdown[nz-menu] {
+    a {
+        cursor: pointer;
+        padding: 0 20px;
+        line-height: 40px;
+
+        fa-icon {
+            color: @orange;
+            margin-right: 15px;
+        }
+    }
+}

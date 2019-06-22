@@ -7,7 +7,7 @@ import { UserService } from '../user.service';
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.scss']
+  styleUrls: ['./homepage.component.less']
 })
 export class HomepageComponent implements OnInit {
 

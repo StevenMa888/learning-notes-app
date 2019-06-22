@@ -14,6 +14,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
+import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
@@ -28,9 +35,12 @@ import { UserComponent } from './user/user.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgZorroAntdModule,
+    FormsModule,
+    BrowserAnimationsModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

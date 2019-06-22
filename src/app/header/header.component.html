@@ -1,18 +1,70 @@
 <div class="header">
-  <div class="logo">Learning Notes</div>
-  <div class="user">
-    <div data-hover="dropdown">
-      <a  class="avatar" href="/user">
-        <img [src]="avatarUrl">
-      </a>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="logo">Learning Notes</div>
     </div>
-    <ul class="dropdown-menu">
-      <li>
-        <a routerLink="/user"><fa-icon icon="user"></fa-icon>My Page</a>
-      </li>
-      <li>
-        <a (click)="logoutUser()"><fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>Logout</a>
-      </li>
-    </ul>
+    <div class="col-md-8">
+      <div class="menu">
+            <ul nz-menu [nzMode]="'horizontal'" style="line-height: 54px;">
+                <li nz-menu-item><i nz-icon type="mail"></i> Navigation One</li>
+                <li nz-menu-item nzDisabled><i nz-icon type="appstore"></i> Navigation Two</li>
+                <li nz-submenu>
+                    <span title><i nz-icon type="setting"></i> Navigation Three - Submenu</span>
+                    <ul>
+                    <li nz-menu-group>
+                        <span title>Item 1</span>
+                        <ul>
+                        <li nz-menu-item>Option 1</li>
+                        <li nz-menu-item>Option 2</li>
+                        </ul>
+                    </li>
+                    <li nz-menu-group>
+                        <span title>Item 2</span>
+                        <ul>
+                        <li nz-menu-item>Option 3</li>
+                        <li nz-menu-item>Option 4</li>
+                        <li nz-submenu>
+                            <span title>Sub Menu</span>
+                            <ul>
+                            <li nz-menu-item nzDisabled>Option 5</li>
+                            <li nz-menu-item>Option 6</li>
+                            </ul>
+                        </li>
+                        <li nz-submenu nzDisabled>
+                            <span title>Disabled Sub Menu</span>
+                            <ul>
+                            <li nz-menu-item>Option 5</li>
+                            <li nz-menu-item>Option 6</li>
+                            </ul>
+                        </li>
+                        </ul>
+                    </li>
+                    </ul>
+                </li>
+                <li nz-menu-item>
+                    <a href="https://ng.ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
+                </li>
+            </ul>
+          </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="user">
+        <nz-dropdown [nzPlacement]="'bottomRight'">
+          <a nz-dropdown class="avatar" href="/user">
+            <img [src]="avatarUrl">
+            <i nz-icon type="caret-down"></i>
+          </a>
+          <ul nz-menu class="avatar-dropdown" nzSelectable>
+            <li nz-menu-item>
+              <a routerLink="/user"><fa-icon icon="user"></fa-icon>My Page</a>
+            </li>
+            <li nz-menu-item>
+              <a (click)="logoutUser()"><fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>Logout</a>
+            </li>
+          </ul>
+        </nz-dropdown>
+      </div>
+    </div>
   </div>
 </div>

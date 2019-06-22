@@ -25,9 +25,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@ngrx/store": "^7.4.0",
     "bootstrap": "^4.3.1",
-    "bootstrap-hover-dropdown": "^2.2.1",
     "core-js": "^2.5.4",
     "jquery": "^3.4.1",
+    "ng-zorro-antd": "^7.5.1",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
