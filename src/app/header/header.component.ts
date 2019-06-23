@@ -11,9 +11,11 @@ declare var $: any;
 export class HeaderComponent implements OnInit {
 
   avatarUrl: string
+  messageCount: number
 
   constructor(private auth: AuthService, private user: UserService) {
     this.avatarUrl = user.getAvatar()
+    this.messageCount = 500
   }
 
   ngOnInit() {

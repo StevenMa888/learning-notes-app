@@ -4,37 +4,43 @@
 .header {
     position: fixed;
     width: 100%;
-    height: 56px;
+    height: 60px;
     top: 0;
-}
+    border-bottom: 1px solid #e8e8e8;
 
-.logo {
-    color: #ea6f5a;
-    font-size: 20px;
-    font-weight: 600;
-    font-family: serif;
-    position: absolute;
-    left: 15px;
-    top: 15px;
-}
+    .logo {
+        font-size: 20px;
+        font-weight: 600;
+        font-family: serif;
+        margin-left: 15px;
+        line-height: 60px;
+        float: left;
+    
+        a {
+            color: @orange;
+        }
+    }
 
-.user {
-    float: right;
-    height: 100%;
+    .menu {
+        float: left;
 
-    .avatar {
-        display: block;
-        position: relative;
-        color: @text-color;
-        width: @menu-collapsed-width;
-        margin: 3px 0;
-        text-align: right;
-
-        img {
-            display: inline-block;
-            height: 50px;
-            width: 50px;
-            border-radius: 50px;
+        [nz-menu] {
+            line-height: 58px;
+            border: none;
+        }
+    }
+    
+    .user {
+        float: right;
+        height: 100%;
+    
+        .avatar {
+            display: block;
+            position: relative;
+            color: @text-color;
+            width: @menu-collapsed-width;
+            margin: 11px 8px;
+            text-align: right;
         }
     }
 }

@@ -1,7 +1,7 @@
 <app-header *ngIf="getIsLoggedIn();else isNotLoggedIn"></app-header>
 <ng-template #isNotLoggedIn>
-  <div class="logo">
-    {{ logo }}
-  </div>
+	<div class="logo">
+		{{ logo }}
+	</div>
 </ng-template>
 <router-outlet></router-outlet>

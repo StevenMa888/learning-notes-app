@@ -1,19 +1,19 @@
 <div class="sign">
-  <div class="main">
-    <h4 class="title">
-      <div>
-        <a routerLink="/login">LOGIN</a>
-        <b></b>
-        <a routerLink="/register" class="active">REGISTER</a>
-      </div>
-    </h4>
-    <div>
-      <form (submit)="registerUser($event)">
-        <div class="input-prepend"><fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username"></div> 
-        <div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"></div>
-        <div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="confirm_password" placeholder="confirm password"></div>
-        <input type="submit" class="register-button" value="REGISTER">
-      </form>
-    </div>
-  </div>
+	<div class="main">
+		<h4 class="title">
+			<div>
+			<a routerLink="/login">LOGIN</a>
+			<b></b>
+			<a routerLink="/register" class="active">REGISTER</a>
+			</div>
+		</h4>
+		<div>
+			<form (submit)="registerUser($event)">
+			<div class="input-prepend"><fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username"></div> 
+			<div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"></div>
+			<div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="confirm_password" placeholder="confirm password"></div>
+			<input type="submit" class="register-button" value="REGISTER">
+			</form>
+		</div>
+	</div>
 </div>
