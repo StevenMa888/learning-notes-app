@@ -1,31 +1,27 @@
 <div class="container">
 	<div style="padding-top: 30px;">
 		<div nz-row [nzGutter]="30">
-			<div nz-col [nzSpan]="8" class="card-wrapper">
-				<nz-card nzTitle="Card title">
-					<p>Card content</p>
+			<div *ngFor="let note of notes" nz-col [nzSpan]="12" class="card-wrapper">
+				<nz-card [nzTitle]="note.title">
+					<textarea nz-input [(ngModel)]="note.content" (change)="showModal(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
 				</nz-card>
 			</div>
-			<div nz-col [nzSpan]="8" class="card-wrapper">
-				<nz-card nzTitle="Card title">
-					<p>Card content</p>
-				</nz-card>
-			</div>
-			<div nz-col [nzSpan]="8" class="card-wrapper">
-				<nz-card nzTitle="Card title">
-					<p>Card content</p>
-				</nz-card>
-			</div>
-			<div nz-col [nzSpan]="8" class="card-wrapper">
-				<nz-card nzTitle="Card title">
-					<p>Card content</p>
-				</nz-card>
-			</div>
-			<div nz-col [nzSpan]="8" class="card-wrapper">
-				<nz-card nzTitle="Card title">
-					<p>Card content</p>
+			<div nz-col [nzSpan]="12" class="card-wrapper">
+				<nz-card>
+					<div class="add-new">
+						<i nz-icon nzType="plus" nzTheme="outline" (click)="addNewNote()" style="font-size: 50px; cursor: pointer"></i>
+					</div>
 				</nz-card>
 			</div>
 		</div>
+		<nz-modal
+			[(nzVisible)]="isVisible"
+			[nzTitle]="modalTitle"
+			(nzOnCancel)="handleCancel()"
+			(nzOnOk)="handleOk()"
+			[nzOkLoading]="isOkLoading"
+		>
+			<p>{{modalContent}}</p>
+		</nz-modal>
 	</div>
 </div>
