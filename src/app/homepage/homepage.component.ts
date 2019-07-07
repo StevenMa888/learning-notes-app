@@ -28,14 +28,18 @@ export class HomepageComponent implements OnInit {
   modalContent: string
 
   constructor(private noteService: NoteService, private messageService: NzMessageService) {
-    noteService.getAllNotes().subscribe(notes => {
+    this.refreshNotes()
+  }
+
+  ngOnInit() {
+  }
+
+  refreshNotes() {
+    this.noteService.getAllNotes().subscribe(notes => {
       if (notes) {
         this.notes = notes
       }
     })
-  }
-
-  ngOnInit() {
   }
 
   addNewNote(): void {
@@ -44,6 +48,7 @@ export class HomepageComponent implements OnInit {
     this.noteService.addNote(note).subscribe(res => {
       this.messageService.remove(loadingMessageId)
       this.messageService.success('Notes savesd', { nzDuration: 1500 })
+      this.refreshNotes()
     })
   }
 
@@ -59,13 +64,14 @@ export class HomepageComponent implements OnInit {
     this.noteService.updateNote(this.currentNote).subscribe(res => {
       if (res.success) {
         this.messageService.success(`Note ${this.currentNote.title} has been updated`, { nzDuration: 1500})
+        this.refreshNotes()
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
       this.isVisible = false
       this.isOkLoading = false
+      this.currentNote = null
     })
-    this.currentNote = null
   }
 
   handleCancel(): void {
@@ -77,6 +83,7 @@ export class HomepageComponent implements OnInit {
     this.noteService.deleteNote(note).subscribe(res => {
       if (res.success) {
         this.messageService.success(`Note ${note.title} has been deleted`, { nzDuration: 1500})
+        this.refreshNotes()
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
