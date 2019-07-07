@@ -3,7 +3,7 @@
 		<div nz-row [nzGutter]="30">
 			<div *ngFor="let note of notes" nz-col [nzSpan]="12" class="card-wrapper">
 				<nz-card [nzTitle]="note.title" [nzExtra]="extraTemplate">
-					<textarea nz-input [(ngModel)]="note.content" (change)="showModal(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
+					<textarea nz-input [(ngModel)]="note.content" (change)="showModalUpdate(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
 				</nz-card>
 				<ng-template #extraTemplate>
 					<button (click)="deleteNote(note)" class="delete-card"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
@@ -12,19 +12,29 @@
 			<div nz-col [nzSpan]="12" class="card-wrapper">
 				<nz-card>
 					<div class="add-new">
-						<i nz-icon nzType="plus" nzTheme="outline" (click)="addNewNote()" style="font-size: 50px; cursor: pointer"></i>
+						<i nz-icon nzType="plus" nzTheme="outline" (click)="showModalAdd()" style="font-size: 50px; cursor: pointer"></i>
 					</div>
 				</nz-card>
 			</div>
 		</div>
 		<nz-modal
-			[(nzVisible)]="isVisible"
-			[nzTitle]="modalTitle"
-			(nzOnCancel)="handleCancel()"
-			(nzOnOk)="handleOk()"
-			[nzOkLoading]="isOkLoading"
+			[(nzVisible)]="isVisibleUpdate"
+			[nzTitle]="modalTitleUpdate"
+			(nzOnCancel)="handleCancelUpdate()"
+			(nzOnOk)="handleOkUpdate()"
+			[nzOkLoading]="isOkLoadingUpdate"
 		>
-			<p>{{modalContent}}</p>
+			<p>{{modalContentUpdate}}</p>
+		</nz-modal>
+		<nz-modal
+			[(nzVisible)]="isVisibleAdd"
+			nzTitle="Add A New Note"
+			(nzOnCancel)="handleCancelAdd()"
+			(nzOnOk)="handleOkAdd()"
+			[nzOkLoading]="isOkLoadingAdd"
+		>
+			<input nz-input [(ngModel)]="modalTitleAdd" placeholder="Your note title">
+			<textarea nz-input [(ngModel)]="modalContentAdd" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Your note content">></textarea>
 		</nz-modal>
 	</div>
 </div>

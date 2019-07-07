@@ -22,10 +22,14 @@ export class HomepageComponent implements OnInit {
 
   notes: Array<Note>
   currentNote: Note
-  isVisible: boolean
-  isOkLoading: boolean
-  modalTitle: string
-  modalContent: string
+  isVisibleUpdate: boolean
+  isOkLoadingUpdate: boolean
+  modalTitleUpdate: string
+  modalContentUpdate: string
+  isVisibleAdd: boolean
+  isOkLoadingAdd: boolean
+  modalTitleAdd: string
+  modalContentAdd: string
 
   constructor(private noteService: NoteService, private messageService: NzMessageService) {
     this.refreshNotes()
@@ -42,25 +46,15 @@ export class HomepageComponent implements OnInit {
     })
   }
 
-  addNewNote(): void {
-    const loadingMessageId = this.messageService.loading('Saving in progress').messageId
-    const note = {'_id': '', 'title': 'test', 'content': 'test content'}
-    this.noteService.addNote(note).subscribe(res => {
-      this.messageService.remove(loadingMessageId)
-      this.messageService.success('Notes savesd', { nzDuration: 1500 })
-      this.refreshNotes()
-    })
-  }
-
-  showModal(note: Note): void {
+  showModalUpdate(note: Note): void {
     this.currentNote = note
-    this.modalTitle = note.title
-    this.modalContent = `Save changes to "${note.title}?"`
-    this.isVisible = true
+    this.modalTitleUpdate = note.title
+    this.modalContentUpdate = `Save changes to "${note.title}?"`
+    this.isVisibleUpdate = true
   }
 
-  handleOk(): void {
-    this.isOkLoading = true
+  handleOkUpdate(): void {
+    this.isOkLoadingUpdate = true
     this.noteService.updateNote(this.currentNote).subscribe(res => {
       if (res.success) {
         this.messageService.success(`Note ${this.currentNote.title} has been updated`, { nzDuration: 1500})
@@ -68,15 +62,42 @@ export class HomepageComponent implements OnInit {
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
-      this.isVisible = false
-      this.isOkLoading = false
+      this.isVisibleUpdate = false
+      this.isOkLoadingUpdate = false
       this.currentNote = null
     })
   }
 
-  handleCancel(): void {
-    this.isVisible = false
+  handleCancelUpdate(): void {
+    this.isVisibleUpdate = false
     this.currentNote = null
+  }
+
+  showModalAdd(): void {
+    this.modalTitleAdd = ""
+    this.modalContentAdd = ""
+    this.isVisibleAdd = true
+  }
+
+  handleOkAdd(): void {
+    this.isOkLoadingAdd = true
+    const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd}
+    const loadingMessageId = this.messageService.loading('Saving in progress').messageId
+    this.noteService.addNote(note).subscribe(res => {
+      this.messageService.remove(loadingMessageId)
+      if (res.success) {
+        this.messageService.success('Notes savesd', { nzDuration: 1500 })
+        this.refreshNotes()
+      } else {
+        this.messageService.error(res.message, { nzDuration: 2500 })
+      }
+      this.isVisibleAdd = false
+      this.isOkLoadingAdd = false
+    })
+  }
+
+  handleCancelAdd(): void {
+    this.isVisibleAdd = false
   }
 
   deleteNote(note: Note): void {
