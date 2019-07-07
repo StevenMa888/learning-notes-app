@@ -85,3 +85,33 @@ app.get('/api/notes', async (req, res) => {
     allNotes = await Note.find()
     res.json(allNotes)
 })
+
+app.put('/api/notes/:id', async (req, res) => {
+    const id = req.params.id
+    const {title, content} = req.body
+    Note.update({ _id: id}, {title, content}, ((err, raw)=> {
+        if (err) {
+            return res.json({success: false, message: "Note failed to update!", trace: err})
+        }
+        if (raw.n > 0) {
+            res.json({success: true, message: "Note has been successfully updated!", trace: raw})
+        } else {
+            res.json({success: false, message: "Cannot find this note!", trace: raw})
+        }
+    }))
+})
+
+app.delete('/api/notes/:id', async (req, res) => {
+    const id = req.params.id
+    const {title, content} = req.body
+    Note.deleteOne({ _id: id}, ((err, raw) => {
+        if (err) {
+            return res.json({success: false, message: "Note failed to delete!", trace: err})
+        }
+        if (raw.n > 0) {
+            res.json({success: true, message: "Note has been successfully deleted!", trace: raw})
+        } else {
+            res.json({success: false, message: "Cannot find this note!", trace: raw})
+        }
+    }))
+})

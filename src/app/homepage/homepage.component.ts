@@ -5,8 +5,10 @@ import { map } from 'rxjs/operators';
 import { UserService } from '../user.service';
 import { NoteService } from '../note.service';
 import { Observable } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd';
 
 interface Note {
+  _id: string,
   title: string,
   content: string
 }
@@ -25,7 +27,7 @@ export class HomepageComponent implements OnInit {
   modalTitle: string
   modalContent: string
 
-  constructor(private noteService: NoteService) {
+  constructor(private noteService: NoteService, private messageService: NzMessageService) {
     noteService.getAllNotes().subscribe(notes => {
       if (notes) {
         this.notes = notes
@@ -36,14 +38,16 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
   }
 
-  addNewNote() {
-    const note = {'title': 'test', 'content': 'test content'}
+  addNewNote(): void {
+    const loadingMessageId = this.messageService.loading('Saving in progress').messageId
+    const note = {'_id': '', 'title': 'test', 'content': 'test content'}
     this.noteService.addNote(note).subscribe(res => {
-      alert(res.message)
+      this.messageService.remove(loadingMessageId)
+      this.messageService.success('Notes savesd', { nzDuration: 1500 })
     })
   }
 
-  showModal(note: Note) {
+  showModal(note: Note): void {
     this.currentNote = note
     this.modalTitle = note.title
     this.modalContent = `Save changes to "${note.title}?"`
@@ -51,16 +55,32 @@ export class HomepageComponent implements OnInit {
   }
 
   handleOk(): void {
-    this.isOkLoading = true;
-    setTimeout(() => {
-      this.isVisible = false;
-      this.isOkLoading = false;
-    }, 1000);
+    this.isOkLoading = true
+    this.noteService.updateNote(this.currentNote).subscribe(res => {
+      if (res.success) {
+        this.messageService.success(`Note ${this.currentNote.title} has been updated`, { nzDuration: 1500})
+      } else {
+        this.messageService.error(res.message, { nzDuration: 2500 })
+      }
+      this.isVisible = false
+      this.isOkLoading = false
+    })
+    this.currentNote = null
   }
 
   handleCancel(): void {
-    this.isVisible = false;
+    this.isVisible = false
     this.currentNote = null
+  }
+
+  deleteNote(note: Note): void {
+    this.noteService.deleteNote(note).subscribe(res => {
+      if (res.success) {
+        this.messageService.success(`Note ${note.title} has been deleted`, { nzDuration: 1500})
+      } else {
+        this.messageService.error(res.message, { nzDuration: 2500 })
+      }
+    })
   }
 
 }

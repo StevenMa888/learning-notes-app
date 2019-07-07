@@ -2,9 +2,12 @@
 	<div style="padding-top: 30px;">
 		<div nz-row [nzGutter]="30">
 			<div *ngFor="let note of notes" nz-col [nzSpan]="12" class="card-wrapper">
-				<nz-card [nzTitle]="note.title">
+				<nz-card [nzTitle]="note.title" [nzExtra]="extraTemplate">
 					<textarea nz-input [(ngModel)]="note.content" (change)="showModal(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
 				</nz-card>
+				<ng-template #extraTemplate>
+					<button (click)="deleteNote(note)" class="delete-card"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
+				</ng-template>
 			</div>
 			<div nz-col [nzSpan]="12" class="card-wrapper">
 				<nz-card>

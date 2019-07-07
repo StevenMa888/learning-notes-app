@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 interface Note {
+  _id: string,
   title: string,
   content: string
 }
@@ -22,5 +23,13 @@ export class NoteService {
 
   addNote(note: Note): Observable<any> {
     return this.http.post('/api/notes', note)
+  }
+
+  updateNote(note: Note): Observable<any> {
+    return this.http.put('/api/notes/' + note._id, note)
+  }
+
+  deleteNote(note: Note): Observable<any> {
+    return this.http.delete('/api/notes/' + note._id)
   }
 }
