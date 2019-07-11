@@ -5,7 +5,8 @@ import { HttpClient } from '@angular/common/http';
 interface Note {
   _id: string,
   title: string,
-  content: string
+  content: string,
+  username: string
 }
 
 @Injectable({
@@ -17,8 +18,8 @@ export class NoteService {
     
   }
 
-  getAllNotes(): Observable<Array<Note>> {
-    return this.http.get<Array<Note>>('/api/notes')
+  getAllNotes(username): Observable<Array<Note>> {
+    return this.http.get<Array<Note>>('/api/notes', { params: { username } } )
   }
 
   addNote(note: Note): Observable<any> {
@@ -29,7 +30,7 @@ export class NoteService {
     return this.http.put('/api/notes/' + note._id, note)
   }
 
-  deleteNote(note: Note): Observable<any> {
-    return this.http.delete('/api/notes/' + note._id)
+  deleteNote(note: Note, username: string): Observable<any> {
+    return this.http.delete('/api/notes/' + note._id, { params: { username } })
   }
 }

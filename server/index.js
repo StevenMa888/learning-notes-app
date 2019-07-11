@@ -68,11 +68,11 @@ app.post('/api/register', async (req, res) => {
 })
 
 app.post('/api/notes', async (req, res) => {
-    const {title, content} = req.body
-    console.log(title, content)
+    const {title, content, username} = req.body
     const note = new Note({
         title,
-        content
+        content,
+        username
     })
     await note.save(_=> {
         res.json({success: true, message: "Note has been successfully added!"})
@@ -82,14 +82,20 @@ app.post('/api/notes', async (req, res) => {
 })
 
 app.get('/api/notes', async (req, res) => {
-    allNotes = await Note.find()
+    const username = req.query.username
+    allNotes = await Note.find({username})
     res.json(allNotes)
 })
 
 app.put('/api/notes/:id', async (req, res) => {
     const id = req.params.id
-    const {title, content} = req.body
-    Note.update({ _id: id}, {title, content}, ((err, raw)=> {
+    const {title, content, username} = req.body
+    const note = await Note.findById({_id: id})
+    if (username !== note.username) {
+        return res.json({success: false, message: "You can only update your notes!"})
+    }
+    
+    Note.update({_id: id}, {title, content}, ((err, raw)=> {
         if (err) {
             return res.json({success: false, message: "Note failed to update!", trace: err})
         }
@@ -103,8 +109,15 @@ app.put('/api/notes/:id', async (req, res) => {
 
 app.delete('/api/notes/:id', async (req, res) => {
     const id = req.params.id
-    const {title, content} = req.body
-    Note.deleteOne({ _id: id}, ((err, raw) => {
+    const username = req.query.username
+    const note = await Note.findById(id)
+    if (note) {
+        if (username !== note.username) {
+            return res.json({success: false, message: "You can only delete your notes!"})
+        }
+    }
+
+    Note.deleteOne({_id: id}, ((err, raw) => {
         if (err) {
             return res.json({success: false, message: "Note failed to delete!", trace: err})
         }
