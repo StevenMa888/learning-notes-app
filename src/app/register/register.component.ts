@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { NoteService } from '../note.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private noteService: NoteService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -35,6 +36,13 @@ export class RegisterComponent implements OnInit {
       if (data.success) {
         alert("You have been successfully registered, please login")
         this.router.navigate(['login'])
+      }
+    })
+
+    // Register a default "General" category for each new user
+    this.noteService.addCategory({_id: '', name: 'General', username}).subscribe( data => {
+      if (!data.success) {
+        alert(data.message)
       }
     })
   }

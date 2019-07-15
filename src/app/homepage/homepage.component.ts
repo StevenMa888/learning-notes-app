@@ -11,7 +11,14 @@ interface Note {
   _id: string,
   title: string,
   content: string,
-  username: string
+  username: string,
+  category: string
+}
+
+interface Category {
+  _id: string,
+  name: string,
+  username: string,
 }
 
 @Component({
@@ -21,7 +28,8 @@ interface Note {
 })
 export class HomepageComponent implements OnInit {
 
-  currentUser: string
+  username: string
+  categoryName: string
   notes: Array<Note>
   currentNote: Note
   isVisibleUpdate: boolean
@@ -32,17 +40,22 @@ export class HomepageComponent implements OnInit {
   isOkLoadingAdd: boolean
   modalTitleAdd: string
   modalContentAdd: string
+  categories: Array<Category>
 
   constructor(private userService: UserService, private noteService: NoteService, private messageService: NzMessageService, private modalService: NzModalService) {
-    this.currentUser = userService.getUsername()
-    this.refreshNotes()
+    this.username = userService.getUsername()
+    noteService.getCategories(this.username).subscribe(categories => {
+      this.categories = categories
+      this.categoryName = this.categories[0].name
+      this.refreshNotes()
+    })
   }
 
   ngOnInit() {
   }
 
   refreshNotes() {
-    this.noteService.getAllNotes(this.currentUser).subscribe(notes => {
+    this.noteService.getNotes(this.username, this.categoryName).subscribe(notes => {
       if (notes) {
         this.notes = notes
       }
@@ -85,7 +98,7 @@ export class HomepageComponent implements OnInit {
 
   handleOkAdd(): void {
     this.isOkLoadingAdd = true
-    const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd, username: this.currentUser}
+    const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd, username: this.username, category: 'General'}
     const loadingMessageId = this.messageService.loading('Saving in progress').messageId
     this.noteService.addNote(note).subscribe(res => {
       this.messageService.remove(loadingMessageId)
@@ -117,7 +130,7 @@ export class HomepageComponent implements OnInit {
   }
 
   deleteNote(note: Note): void {
-    this.noteService.deleteNote(note, this.currentUser).subscribe(res => {
+    this.noteService.deleteNote(note, this.username).subscribe(res => {
       if (res.success) {
         this.messageService.success(`Note ${note.title} has been deleted`, { nzDuration: 1500})
         this.refreshNotes()
@@ -125,6 +138,10 @@ export class HomepageComponent implements OnInit {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
     })
+  }
+
+  addNewCategory(): void {
+    console.log(this)
   }
 
 }

@@ -9,6 +9,7 @@ mongoose.connect('mongodb://localhost:27017/learning_notes').then(() => {console
 
 const User = require('./models/user')
 const Note = require('./models/note')
+const Category = require('./models/category')
 
 app.use(session({secret: 'my-secret-is-good', resave: false, saveUninitialized: true}))
 app.use(bodyParser.json())
@@ -56,7 +57,7 @@ app.post('/api/register', async (req, res) => {
         res.json({success: false, message: 'User already exists!'})
         return
     }
-    const user = new  User({
+    const user = new User({
         username,
         password
     })
@@ -68,11 +69,12 @@ app.post('/api/register', async (req, res) => {
 })
 
 app.post('/api/notes', async (req, res) => {
-    const {title, content, username} = req.body
+    const {title, content, username, category} = req.body
     const note = new Note({
         title,
         content,
-        username
+        username,
+        category
     })
     await note.save(_=> {
         res.json({success: true, message: "Note has been successfully added!"})
@@ -83,19 +85,20 @@ app.post('/api/notes', async (req, res) => {
 
 app.get('/api/notes', async (req, res) => {
     const username = req.query.username
-    allNotes = await Note.find({username})
+    const category = req.query.category
+    const allNotes = category == null ? await Note.find({username}) : await Note.find({username, category})
     res.json(allNotes)
 })
 
 app.put('/api/notes/:id', async (req, res) => {
     const id = req.params.id
-    const {title, content, username} = req.body
+    const {title, content, username, category} = req.body
     const note = await Note.findById({_id: id})
     if (username !== note.username) {
         return res.json({success: false, message: "You can only update your notes!"})
     }
-    
-    Note.update({_id: id}, {title, content}, ((err, raw)=> {
+
+    Note.update({_id: id}, {title, content, category}, ((err, raw)=> {
         if (err) {
             return res.json({success: false, message: "Note failed to update!", trace: err})
         }
@@ -125,6 +128,67 @@ app.delete('/api/notes/:id', async (req, res) => {
             res.json({success: true, message: "Note has been successfully deleted!", trace: raw})
         } else {
             res.json({success: false, message: "Cannot find this note!", trace: raw})
+        }
+    }))
+})
+
+app.post('/api/categories', async (req, res) => {
+    const {name, username} = req.body
+    const category = new Category({
+       name,
+       username
+    })
+    await category.save(_=> {
+        res.json({success: true, message: "Category has been successfully added!"})
+    }, (err) => {
+        res.json({success: false, message: "Category failed to add!"})
+    })
+})
+
+app.get('/api/categories', async (req, res) => {
+    const username = req.query.username
+    const allCategories = await Category.find({username})
+    res.json(allCategories)
+})
+
+app.put('/api/categories/:id', async (req, res) => {
+    const id = req.params.id
+    const {name, username} = req.body
+    const category = await Category.findById({_id: id})
+    if (username !== category.username) {
+        return res.json({success: false, message: "You can only update your categories!"})
+    }
+
+    Category.update({_id: id}, {name}, ((err, raw)=> {
+        if (err) {
+            return res.json({success: false, message: "Category failed to update!", trace: err})
+        }
+        if (raw.n > 0) {
+            res.json({success: true, message: "Category has been successfully updated!", trace: raw})
+        } else {
+            res.json({success: false, message: "Cannot find this category!", trace: raw})
+        }
+    }))
+})
+
+app.delete('/api/categories/:id', async (req, res) => {
+    const id = req.params.id
+    const username = req.query.username
+    const category = await Category.findById(id)
+    if (category) {
+        if (username !== category.username) {
+            return res.json({success: false, message: "You can only delete your category!"})
+        }
+    }
+
+    Category.deleteOne({_id: id}, ((err, raw) => {
+        if (err) {
+            return res.json({success: false, message: "Category failed to delete!", trace: err})
+        }
+        if (raw.n > 0) {
+            res.json({success: true, message: "Category has been successfully deleted!", trace: raw})
+        } else {
+            res.json({success: false, message: "Cannot find this category!", trace: raw})
         }
     }))
 })

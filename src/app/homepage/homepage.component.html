@@ -33,7 +33,21 @@
 			(nzOnOk)="handleOkAdd()"
 			[nzOkLoading]="isOkLoadingAdd"
 		>
-			<input nz-input [(ngModel)]="modalTitleAdd" placeholder="Your note title">
+		<nz-select
+			style="width: 50%;"
+			[(ngModel)]="selectedCategory"
+			nzPlaceHolder="Select a category"
+			nzShowSearch
+			nzAllowClear
+			[nzDropdownRender]="render"
+		>
+			<nz-option *ngFor="let c of categories" [nzValue]="c.name" [nzLabel]="c.name"></nz-option>
+		</nz-select>
+		<ng-template #render>
+			<nz-divider style="margin: 4px 0;"></nz-divider>
+			<div style="padding: 8px; cursor: pointer" (click)="addNewCategory()"><i nz-icon type="plus"></i> Add a new category</div>
+		</ng-template>
+		<input nz-input [(ngModel)]="modalTitleAdd" placeholder="Your note title">
 			<textarea nz-input [(ngModel)]="modalContentAdd" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Your note content">></textarea>
 		</nz-modal>
 	</div>

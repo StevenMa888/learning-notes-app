@@ -6,7 +6,14 @@ interface Note {
   _id: string,
   title: string,
   content: string,
-  username: string
+  username: string,
+  category: string
+}
+
+interface Category {
+  _id: string,
+  name: string,
+  username: string,
 }
 
 @Injectable({
@@ -18,8 +25,8 @@ export class NoteService {
     
   }
 
-  getAllNotes(username): Observable<Array<Note>> {
-    return this.http.get<Array<Note>>('/api/notes', { params: { username } } )
+  getNotes(username: string, categoryName: string): Observable<Array<Note>> {
+    return this.http.get<Array<Note>>('/api/notes', { params: { username, categoryName } } )
   }
 
   addNote(note: Note): Observable<any> {
@@ -32,5 +39,13 @@ export class NoteService {
 
   deleteNote(note: Note, username: string): Observable<any> {
     return this.http.delete('/api/notes/' + note._id, { params: { username } })
+  }
+
+  addCategory(category: Category): Observable<any> {
+    return this.http.post('/api/categories', category)
+  }
+
+  getCategories(username): Observable<Array<Category>> {
+    return this.http.get<Array<Category>>('/api/categories', { params: { username } } )
   }
 }
