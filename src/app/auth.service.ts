@@ -13,7 +13,7 @@ interface isLoggedIn {
 })
 export class AuthService {
 
-  private isLoggedInSub = new BehaviorSubject<boolean>(false)
+  private isLoggedInSub = new BehaviorSubject<boolean>(null)
   isLoggedInObservable = this.isLoggedInSub.asObservable()
 
   constructor(private http: HttpClient, private user: UserService, private router: Router) {

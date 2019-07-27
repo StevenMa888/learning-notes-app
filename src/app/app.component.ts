@@ -14,8 +14,8 @@ export class AppComponent {
 
   constructor(private auth: AuthService) {
     this.logo = "Learning Notes"
-    this.isLoggedIn = true
     this.auth.getIsLoggedIn().subscribe(isLoggedIn => {
+      if (isLoggedIn == null) return // disregard initial value null
       this.isLoggedIn = isLoggedIn
     })
   }
