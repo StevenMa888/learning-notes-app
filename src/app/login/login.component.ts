@@ -10,7 +10,7 @@ import { UserService } from '../user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private auth: AuthService, private user: UserService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -20,14 +20,7 @@ export class LoginComponent implements OnInit {
     const target = event.target
     const username = target.querySelector('#username').value
     const password = target.querySelector('#password').value
-    this.auth.checkUser(username, password).subscribe(data => {
-      if (data.success) {
-        this.user.setLoggedInUser(username);
-        this.router.navigate([''])
-      } else {
-        alert("Username or password is incorrect, please try again")
-      }
-    })
+    this.auth.loginUser(username, password)
   }
 
 }
