@@ -1,0 +1,16 @@
+{
+    // 启用/禁用在 JavaScript 文件中引用 CodeLens。
+    "javascript.referencesCodeLens.enabled": true,
+
+    // 启用/禁用实现 CodeLens。要求 TypeScript >= 2.2.0。
+    "typescript.implementationsCodeLens.enabled": true,
+
+    // 启用/禁用在 TypeScript 文件中引用 CodeLens。要求 TypeScript >= 2.0.6。
+    "typescript.referencesCodeLens.enabled": true,
+
+    // Enable/disable the implementations code lens.
+    "java.implementationsCodeLens.enabled": true,
+
+    // Enable/disable the references code lens.
+    "java.referencesCodeLens.enabled": true
+}
