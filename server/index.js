@@ -85,7 +85,7 @@ app.post('/api/notes', async (req, res) => {
 
 app.get('/api/notes', async (req, res) => {
     const username = req.query.username
-    const category = req.query.category
+    const category = req.query.categoryName
     const allNotes = category == null ? await Note.find({username}) : await Note.find({username, category})
     res.json(allNotes)
 })

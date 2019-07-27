@@ -39,14 +39,26 @@ export class HomepageComponent implements OnInit {
   isVisibleAdd: boolean
   isOkLoadingAdd: boolean
   modalTitleAdd: string
+  modalCategoryAdd: string
   modalContentAdd: string
+  isVisibleAddCategory: boolean
+  isOkLoadingAddCategory: boolean
+  modalContentAddCategory: string
+  
   categories: Array<Category>
 
   constructor(private userService: UserService, private noteService: NoteService, private messageService: NzMessageService, private modalService: NzModalService) {
     this.username = userService.getUsername()
-    noteService.getCategories(this.username).subscribe(categories => {
+    noteService.categoriesObservable.subscribe(categories => {
+      if (categories == null) return // disregard initial value null
       this.categories = categories
-      this.categoryName = this.categories[0].name
+      if (this.categoryName == null) {
+        noteService.setCategory(this.categories[0])
+      }
+      this.refreshNotes()
+    })
+    noteService.categoryObservable.subscribe(category => {
+      this.categoryName = category.name
       this.refreshNotes()
     })
   }
@@ -98,7 +110,7 @@ export class HomepageComponent implements OnInit {
 
   handleOkAdd(): void {
     this.isOkLoadingAdd = true
-    const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd, username: this.username, category: 'General'}
+    const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd, username: this.username, category: this.modalCategoryAdd}
     const loadingMessageId = this.messageService.loading('Saving in progress').messageId
     this.noteService.addNote(note).subscribe(res => {
       this.messageService.remove(loadingMessageId)
@@ -115,6 +127,35 @@ export class HomepageComponent implements OnInit {
 
   handleCancelAdd(): void {
     this.isVisibleAdd = false
+  }
+
+  showModalAddCategory(): void {
+    this.modalContentAddCategory = ""
+    this.isVisibleAddCategory = true
+  }
+
+  handleOkAddCategory(): void {
+    this.isOkLoadingAddCategory = true
+    const category = { _id: '', name: this.modalContentAddCategory, username: this.username}
+    const loadingMessageId = this.messageService.loading('Saving in progress').messageId
+    this.noteService.addCategory(category).subscribe(res => {
+      this.messageService.remove(loadingMessageId)
+      if (res.success) {
+        this.messageService.success('New category added', { nzDuration: 1500 })
+        this.noteService.getCategories(this.username).subscribe(categories => {
+          this.noteService.setCategories(categories)
+        })
+        this.refreshNotes()
+      } else {
+        this.messageService.error(res.message, { nzDuration: 2500 })
+      }
+      this.isVisibleAddCategory = false
+      this.isOkLoadingAddCategory = false
+    })
+  }
+
+  handleCancelAddCategory(): void {
+    this.isVisibleAddCategory = false
   }
 
   showDeleteConfirm(note: Note): void {
@@ -138,10 +179,6 @@ export class HomepageComponent implements OnInit {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
     })
-  }
-
-  addNewCategory(): void {
-    console.log(this)
   }
 
 }
