@@ -3,6 +3,9 @@ const bodyParser = require('body-parser')
 const session = require('express-session') // session storage using mongodb
 const app = express()
 const mongoose = require('mongoose')
+const formidable = require('formidable')
+const sd = require("silly-datetime")
+const fs = require('fs')
 
 mongoose.Promise = Promise
 mongoose.connect('mongodb://localhost:27017/learning_notes').then(() => {console.log("Mongoose is up!")})
@@ -12,6 +15,7 @@ const Note = require('./models/note')
 const Category = require('./models/category')
 
 app.use(session({secret: 'my-secret-is-good', resave: false, saveUninitialized: true}))
+app.use(express.static('public'))
 app.use(bodyParser.json())
 
 app.listen(1234, "localhost", () => console.log("Server listening at localhost:1234"))
@@ -191,4 +195,84 @@ app.delete('/api/categories/:id', async (req, res) => {
             res.json({success: false, message: "Cannot find this category!", trace: raw})
         }
     }))
+})
+
+app.post('/api/avatar', async (req, res, next) => {
+    const AVATAR_UPLOAD_FOLDER = '/avatar/' // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
+    const form = new formidable.IncomingForm()   //创建上传表单
+    form.encoding = 'utf-8'        //设置编辑
+    form.uploadDir = 'public' + AVATAR_UPLOAD_FOLDER    //设置上传目录
+    form.keepExtensions = true  //保留后缀
+    form.maxFieldsSize = 2 * 1024 * 1024   //文件大小
+
+    form.parse(req, function (err, fields, files) {
+        if (err) {
+            return res.json({
+                "code": 500,
+                "message": "内部服务器错误"
+            })
+        }
+
+        // 限制文件大小 单位默认字节 这里限制大小为2m
+        if (files.avatar.size > form.maxFieldsSize) {
+            fs.unlink(files.avatar.path)
+            return res.json({
+                "code": 401,
+                "message": "图片应小于2M"
+            })
+        }
+
+        var extName = '';  //后缀名
+        switch (files.avatar.type) {
+            case 'image/pjpeg':
+                extName = 'jpg'
+                break
+            case 'image/jpeg':
+                extName = 'jpg'
+                break
+            case 'image/png':
+                extName = 'png'
+                break
+            case 'image/x-png':
+                extName = 'png'
+                break
+        }
+
+        if (extName.length == 0) {
+            return res.json({
+                "code": 404,
+                "message": "只支持png和jpg格式图片"
+            })
+        }
+
+        //使用第三方模块silly-datetime
+        const t = sd.format(new Date(), 'YYYYMMDDHHmmss')
+        //生成随机数
+        const ran = parseInt(Math.random() * 8999 + 10000)
+
+        // 生成新图片名称
+        const avatarName = t + '_' + ran + '.' + extName
+        // 新图片路径
+        const newPath = form.uploadDir + avatarName
+
+        // 更改名字和路径
+        fs.rename(files.avatar.path, newPath, function (err) {
+            if (err) {
+                return res.json({
+                    "code": 401,
+                    "message": "图片上传失败"
+                })
+            }
+            User.update({username: fields.username}, {avatarUrl: newPath}, ((err, raw)=> {
+                if (err) {
+                    return res.json({success: false, message: "User avatar failed to upload!", trace: err})
+                }
+                if (raw.n > 0) {
+                    res.json({success: true, message: "User avatar has been successfully uploaded!", trace: raw})
+                } else {
+                    res.json({success: false, message: "Cannot find this user!", trace: raw})
+                }
+            }))
+        })
+    })
 })
