@@ -34,7 +34,12 @@ export class UserService {
     })
   }
 
-  getAvatar(): string {
-    return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1559156233488&di=4da5aff32b7bdd563b43f0aa9bf97f34&imgtype=0&src=http%3A%2F%2Fpic.qingting.fm%2F2017%2F1006%2F20171006203135646809.jpg%2521800"
+  getAvatar(): Observable<any> {
+    return this.http.get('/api/avatar', { 
+      params: {
+        username: this.getUsername() 
+      },
+      responseType: 'blob'
+    })
   }
 }

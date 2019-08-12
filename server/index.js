@@ -276,3 +276,9 @@ app.post('/api/avatar', async (req, res, next) => {
         })
     })
 })
+
+app.get('/api/avatar', async function (req, res) {
+    const username = req.query.username
+    const user = await User.findOne({username})
+    res.sendFile(__dirname + "/" + user.avatarUrl)
+})

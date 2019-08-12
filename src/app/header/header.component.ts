@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { NoteService } from '../note.service';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 
 interface Category {
@@ -17,13 +18,16 @@ interface Category {
 })
 export class HeaderComponent implements OnInit {
 
-  avatarUrl: string
+  avatarUrl: SafeUrl
   messageCount: number
   categories: Array<Category>
 
-  constructor(private auth: AuthService, private userService: UserService, private noteService: NoteService) {
-    this.avatarUrl = userService.getAvatar()
+  constructor(private sanitizer: DomSanitizer, private auth: AuthService, private userService: UserService, private noteService: NoteService) {
     this.messageCount = 500
+    userService.getAvatar().subscribe(blob => {
+      const url = URL.createObjectURL(blob)
+      this.avatarUrl = sanitizer.bypassSecurityTrustResourceUrl(url)
+    })
     noteService.categoriesObservable.subscribe(categories => {
       this.categories = categories
     })
