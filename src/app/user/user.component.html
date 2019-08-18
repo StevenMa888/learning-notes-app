@@ -1,10 +1,9 @@
-<div class="container">
+<div class="container user">
 	<div class="row">
 		<nz-upload
 			class="avatar-uploader"
 			nzAction="/api/avatar"
 			nzName="avatar"
-			[nzData]="username"
 			nzListType="picture-card"
 			[(nzFileList)]="fileList"
 			[nzShowButton]="fileList.length < 1"
@@ -15,21 +14,20 @@
 		>
 			<i class="upload-icon" nz-icon nzType="plus"></i>
 			<div class="ant-upload-text">Upload</div>
-			<!-- <ng-container *ngIf="!avatarUrl">
-				<i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
-				<div class="ant-upload-text">Upload</div>
-			</ng-container>
-			<img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" /> -->
 		</nz-upload>
-		<nz-modal
-			[nzVisible]="previewVisible"
-			[nzContent]="modalContent"
-			[nzFooter]="null"
-			(nzOnCancel)="previewVisible = false"
-		>
-			<ng-template #modalContent>
-			<img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
-			</ng-template>
-		</nz-modal>
 	</div>
+	<div class="row">
+		<button nz-button nzSize="small" nzType="primary" (click)="handleUpload()">Save</button>
+		<button nz-button nzSize="small" nzType="default" (click)="reset()">Cancel</button>
+	</div>
+	<nz-modal
+		[nzVisible]="previewVisible"
+		[nzContent]="modalContent"
+		[nzFooter]="null"
+		(nzOnCancel)="previewVisible = false"
+	>
+		<ng-template #modalContent>
+		<img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+		</ng-template>
+	</nz-modal>
 </div>

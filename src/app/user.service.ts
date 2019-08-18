@@ -42,4 +42,9 @@ export class UserService {
       responseType: 'blob'
     })
   }
+
+  setAvatar(formData: FormData): Observable<any> {
+    formData.append('username', this.getUsername())
+    return this.http.post('/api/avatar', formData)
+  }
 }

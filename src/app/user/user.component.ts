@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
   avatarUrl: string | undefined = ''
   previewVisible = false
   previewImage: string | undefined = ''
-  fileList = []
+  fileList: UploadFile[] = []
   showUploadList = {
     showPreviewIcon: true,
     showRemoveIcon: true,
@@ -98,6 +98,23 @@ export class UserComponent implements OnInit {
   handlePreview = (file: UploadFile) => {
     this.previewImage = file.url || file.thumbUrl
     this.previewVisible = true
+  }
+
+  handleUpload(): void {
+    const formData = new FormData()
+    const file: File = this.fileList[0].originFileObj
+    formData.append('avatar', file)
+    this.user.setAvatar(formData).subscribe(res => {
+      if (res.success) {
+        this.msg.success('Your avatar has been successfully saved!')
+      } else {
+        this.msg.error(res.message)
+      }
+    })
+  }
+
+  reset(): void {
+    console.log("reset")
   }
 
 }
