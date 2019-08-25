@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
   previewVisible = false
   previewImage: string | undefined = ''
   fileList: UploadFile[] = []
+  fileType: string[] = ['image/jpeg', 'image/png']
   showUploadList = {
     showPreviewIcon: true,
     showRemoveIcon: true,
@@ -31,9 +32,9 @@ export class UserComponent implements OnInit {
   }
   beforeUpload = (file: File) => {
     return new Observable((observer: Observer<boolean>) => {
-      const isJPG = file.type === 'image/jpeg'
-      if (!isJPG) {
-        this.msg.error('You can only upload JPG file!')
+      const isValidType = this.fileType.includes(file.type)
+      if (!isValidType) {
+        this.msg.error('You can only upload file of type: ' + this.fileType.toString())
         observer.complete()
         return
       }
@@ -51,7 +52,7 @@ export class UserComponent implements OnInit {
           return
         }
 
-        observer.next(isJPG && isLt2M && dimensionRes)
+        observer.next(isValidType && isLt2M && dimensionRes)
         observer.complete()
       })
     })
@@ -65,13 +66,13 @@ export class UserComponent implements OnInit {
 
   private checkImageDimension(file: File): Promise<boolean> {
     return new Promise(resolve => {
-      const img = new Image() // create image
+      const img = new Image()
       img.src = window.URL.createObjectURL(file)
       img.onload = () => {
         const width = img.naturalWidth
         const height = img.naturalHeight
         window.URL.revokeObjectURL(img.src!)
-        resolve(width === height && width >= 300)
+        resolve(width >= 50 && height >= 50)
       }
     })
   }
@@ -107,6 +108,7 @@ export class UserComponent implements OnInit {
     this.user.setAvatar(formData).subscribe(res => {
       if (res.success) {
         this.msg.success('Your avatar has been successfully saved!')
+        this.user.refreshAvatar()
       } else {
         this.msg.error(res.message)
       }
@@ -114,7 +116,7 @@ export class UserComponent implements OnInit {
   }
 
   reset(): void {
-    console.log("reset")
+    this.fileList = []
   }
 
 }

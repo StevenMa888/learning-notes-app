@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
   categories: Array<Category>
 
   constructor(private sanitizer: DomSanitizer, private auth: AuthService, private userService: UserService, private noteService: NoteService) {
-    userService.getAvatar().subscribe(blob => {
+    userService.avatarObservable.subscribe(blob => {
       const url = URL.createObjectURL(blob)
       this.avatarUrl = sanitizer.bypassSecurityTrustResourceUrl(url)
     })

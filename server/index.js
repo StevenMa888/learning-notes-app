@@ -197,6 +197,14 @@ app.delete('/api/categories/:id', async (req, res) => {
     }))
 })
 
+app.post('/api/tempUploads', (req, res) => {
+    return new Promise((resolve, subject) => {
+        setTimeout(() => {
+            resolve(res.json({success: true, message: "Temp uploads received"}))
+        }, 100)
+    })
+})
+
 app.post('/api/avatar', async (req, res, next) => {
     const AVATAR_UPLOAD_FOLDER = '/avatar/' // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
     const form = new formidable.IncomingForm()   //创建上传表单
