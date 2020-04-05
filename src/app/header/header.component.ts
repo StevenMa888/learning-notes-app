@@ -3,13 +3,8 @@ import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { NoteService } from '../note.service';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { Category, CategoryService } from '../category.service';
 declare var $: any;
-
-interface Category {
-  _id: string,
-  name: string,
-  username: string,
-}
 
 @Component({
   selector: 'app-header',
@@ -21,14 +16,18 @@ export class HeaderComponent implements OnInit {
   avatarUrl: SafeUrl
   messageCount: number
   categories: Array<Category>
+  selectedCategory: Category
 
-  constructor(private sanitizer: DomSanitizer, private auth: AuthService, private userService: UserService, private noteService: NoteService) {
+  constructor(private sanitizer: DomSanitizer, private auth: AuthService, private userService: UserService, private categoryService: CategoryService) {
     userService.avatarObservable.subscribe(blob => {
       const url = URL.createObjectURL(blob)
       this.avatarUrl = sanitizer.bypassSecurityTrustResourceUrl(url)
     })
-    noteService.categoriesObservable.subscribe(categories => {
+    categoryService.categoriesObservable.subscribe(categories => {
       this.categories = categories
+    })
+    categoryService.categoryObservable.subscribe(category => {
+      this.selectedCategory = category
     })
   }
 
@@ -41,7 +40,7 @@ export class HeaderComponent implements OnInit {
   }
 
   setCategory(category: Category): void {
-    this.noteService.setCategory(category)
+    this.categoryService.setCategory(category)
   }
 
 }

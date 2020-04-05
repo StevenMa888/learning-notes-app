@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { NoteService } from '../note.service';
+import { CategoryService } from '../category.service';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +10,7 @@ import { NoteService } from '../note.service';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private auth: AuthService, private noteService: NoteService, private router: Router) { }
+  constructor(private auth: AuthService, private categoryService: CategoryService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
     })
 
     // Register a default "General" category for each new user
-    this.noteService.addCategory({_id: '', name: 'General', username}).subscribe( data => {
+    this.categoryService.addCategory({_id: '', name: 'General', username}).subscribe( data => {
       if (!data.success) {
         alert(data.message)
       }

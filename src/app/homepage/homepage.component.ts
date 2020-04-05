@@ -3,23 +3,10 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { UserService } from '../user.service';
-import { NoteService } from '../note.service';
+import { NoteService, Note } from '../note.service';
 import { Observable } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-
-interface Note {
-  _id: string,
-  title: string,
-  content: string,
-  username: string,
-  category: string
-}
-
-interface Category {
-  _id: string,
-  name: string,
-  username: string,
-}
+import { Category, CategoryService } from '../category.service';
 
 @Component({
   selector: 'app-homepage',
@@ -29,7 +16,6 @@ interface Category {
 export class HomepageComponent implements OnInit {
 
   username: string
-  categoryName: string
   notes: Array<Note>
   currentNote: Note
   isVisibleUpdate: boolean
@@ -47,18 +33,19 @@ export class HomepageComponent implements OnInit {
   
   categories: Array<Category>
 
-  constructor(private userService: UserService, private noteService: NoteService, private messageService: NzMessageService, private modalService: NzModalService) {
+  constructor(private userService: UserService, private categoryService: CategoryService,private noteService: NoteService, private messageService: NzMessageService, private modalService: NzModalService) {
     this.username = userService.getUsername()
-    noteService.categoriesObservable.subscribe(categories => {
+    categoryService.categoriesObservable.subscribe(categories => {
       if (categories == null) return // disregard initial value null
       this.categories = categories
-      if (this.categoryName == null) {
-        noteService.setCategory(this.categories[0])
+      if (categoryService.selectedCategory  == null) {
+        categoryService.setCategory(this.categories[0])
+      } else {
+        this.refreshNotes()
       }
-      this.refreshNotes()
     })
-    noteService.categoryObservable.subscribe(category => {
-      this.categoryName = category.name
+    categoryService.categoryObservable.subscribe(category => {
+      this.categoryService.selectedCategory = category
       this.refreshNotes()
     })
   }
@@ -67,7 +54,7 @@ export class HomepageComponent implements OnInit {
   }
 
   refreshNotes() {
-    this.noteService.getNotes(this.username, this.categoryName).subscribe(notes => {
+    this.noteService.getNotes(this.username, this.categoryService.selectedCategory.name).subscribe(notes => {
       if (notes) {
         this.notes = notes
       }
@@ -138,12 +125,12 @@ export class HomepageComponent implements OnInit {
     this.isOkLoadingAddCategory = true
     const category = { _id: '', name: this.modalContentAddCategory, username: this.username}
     const loadingMessageId = this.messageService.loading('Saving in progress').messageId
-    this.noteService.addCategory(category).subscribe(res => {
+    this.categoryService.addCategory(category).subscribe(res => {
       this.messageService.remove(loadingMessageId)
       if (res.success) {
         this.messageService.success('New category added', { nzDuration: 1500 })
-        this.noteService.getCategories(this.username).subscribe(categories => {
-          this.noteService.setCategories(categories)
+        this.categoryService.getCategories(this.username).subscribe(categories => {
+          this.categoryService.setCategories(categories)
         })
         this.refreshNotes()
       } else {
