@@ -33,6 +33,7 @@ export class CategoryService {
   }
 
   setCategory(category: Category): void {
+    this.selectedCategory = category
     this.categorySub.next(category)
   }
 

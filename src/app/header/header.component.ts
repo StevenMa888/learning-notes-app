@@ -4,6 +4,7 @@ import { AuthService } from '../auth.service';
 import { NoteService } from '../note.service';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Category, CategoryService } from '../category.service';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -18,7 +19,11 @@ export class HeaderComponent implements OnInit {
   categories: Array<Category>
   selectedCategory: Category
 
-  constructor(private sanitizer: DomSanitizer, private auth: AuthService, private userService: UserService, private categoryService: CategoryService) {
+  constructor(private sanitizer: DomSanitizer,
+    private auth: AuthService,
+    private userService: UserService,
+    private categoryService: CategoryService,
+    private router: Router) {
     userService.avatarObservable.subscribe(blob => {
       const url = URL.createObjectURL(blob)
       this.avatarUrl = sanitizer.bypassSecurityTrustResourceUrl(url)
@@ -40,6 +45,9 @@ export class HeaderComponent implements OnInit {
   }
 
   setCategory(category: Category): void {
+    if (this.router.url != '/') {
+      this.router.navigate([''])
+    }
     this.categoryService.setCategory(category)
   }
 

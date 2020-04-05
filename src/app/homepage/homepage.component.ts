@@ -48,6 +48,9 @@ export class HomepageComponent implements OnInit {
       this.categoryService.selectedCategory = category
       this.refreshNotes()
     })
+    if (this.notes == null && this.categoryService.selectedCategory != null) {
+      categoryService.setCategory(this.categoryService.selectedCategory)
+    }
   }
 
   ngOnInit() {
