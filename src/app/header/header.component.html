@@ -22,7 +22,7 @@
 		<nz-dropdown [nzPlacement]="'bottomRight'">
 			<a nz-dropdown class="avatar" href="/user">
 				<nz-badge [nzCount]="messageCount" [nzOverflowCount]="99">
-					<nz-avatar [nzSrc]="avatarUrl" [nzSize]="38"></nz-avatar>
+					<nz-avatar [nzSrc]="avatarUrl | async" [nzSize]="38"></nz-avatar>
 				</nz-badge>
 				<i nz-icon type="caret-down"></i>
 			</a>

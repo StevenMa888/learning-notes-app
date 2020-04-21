@@ -5,6 +5,8 @@ import { NoteService } from '../note.service';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Category, CategoryService } from '../category.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -14,7 +16,7 @@ declare var $: any;
 })
 export class HeaderComponent implements OnInit {
 
-  avatarUrl: SafeUrl
+  avatarUrl: Observable<SafeUrl>
   messageCount: number
   categories: Array<Category>
   selectedCategory: Category
@@ -24,10 +26,10 @@ export class HeaderComponent implements OnInit {
     private userService: UserService,
     private categoryService: CategoryService,
     private router: Router) {
-    userService.avatarObservable.subscribe(blob => {
+    this.avatarUrl = userService.avatarObservable.pipe(map(blob => {
       const url = URL.createObjectURL(blob)
-      this.avatarUrl = sanitizer.bypassSecurityTrustResourceUrl(url)
-    })
+      return sanitizer.bypassSecurityTrustResourceUrl(url)
+    }))
     categoryService.categoriesObservable.subscribe(categories => {
       this.categories = categories
     })
