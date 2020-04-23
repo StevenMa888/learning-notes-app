@@ -48,6 +48,7 @@ export class HomepageComponent implements OnInit {
     })
     categoryService.categoryObservable.subscribe(category => {
       this.categoryService.selectedCategory = category
+      this.modalCategoryAdd = category.name
       this.refreshNotes()
     })
     if (this.notes == null && this.categoryService.selectedCategory != null) {
@@ -96,12 +97,18 @@ export class HomepageComponent implements OnInit {
   }
 
   showModalAdd(): void {
-    this.modalTitleAdd = ""
-    this.modalContentAdd = ""
     this.isVisibleAdd = true
   }
 
   handleOkAdd(): void {
+    if (this.isEmpty(this.modalCategoryAdd)) {
+      alert("Please select a category")
+      return
+    }
+    if (this.isEmpty(this.modalTitleAdd) || this.isEmpty(this.modalContentAdd)) {
+      alert("Please fill in title and content")
+      return
+    }
     this.isOkLoadingAdd = true
     const note = { _id: '', title: this.modalTitleAdd, content: this.modalContentAdd, username: this.username, category: this.modalCategoryAdd}
     const loadingMessageId = this.messageService.loading('Saving in progress').messageId
@@ -115,6 +122,9 @@ export class HomepageComponent implements OnInit {
       }
       this.isVisibleAdd = false
       this.isOkLoadingAdd = false
+      this.modalCategoryAdd = this.categoryService.selectedCategory.name
+      this.modalTitleAdd = ''
+      this.modalContentAdd = ''
     })
   }
 
@@ -198,6 +208,10 @@ export class HomepageComponent implements OnInit {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
     })
+  }
+
+  isEmpty(value: string) {
+    return value == null || value == ''
   }
 
 }
