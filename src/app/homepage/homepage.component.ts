@@ -30,10 +30,12 @@ export class HomepageComponent implements OnInit {
   isVisibleAddCategory: boolean
   isOkLoadingAddCategory: boolean
   modalContentAddCategory: string
-  
   categories: Array<Category>
 
-  constructor(private userService: UserService, private categoryService: CategoryService,private noteService: NoteService, private messageService: NzMessageService, private modalService: NzModalService) {
+  constructor(private userService: UserService, private categoryService: CategoryService,
+    private noteService: NoteService, private messageService: NzMessageService,
+    private modalService: NzModalService, private router: Router
+  ) {
     this.username = userService.getUsername()
     categoryService.categoriesObservable.subscribe(categories => {
       if (categories == null) return // disregard initial value null
@@ -90,6 +92,7 @@ export class HomepageComponent implements OnInit {
   handleCancelUpdate(): void {
     this.isVisibleUpdate = false
     this.currentNote = null
+    this.refreshNotes()
   }
 
   showModalAdd(): void {
@@ -148,7 +151,7 @@ export class HomepageComponent implements OnInit {
     this.isVisibleAddCategory = false
   }
 
-  showDeleteConfirm(note: Note): void {
+  showDeleteNoteConfirm(note: Note): void {
     this.modalService.confirm({
       nzTitle: 'Are you sure to delete this note?',
       nzContent: `<b style="color: red;">${note.title}</b>`,
@@ -164,6 +167,32 @@ export class HomepageComponent implements OnInit {
     this.noteService.deleteNote(note, this.username).subscribe(res => {
       if (res.success) {
         this.messageService.success(`Note ${note.title} has been deleted`, { nzDuration: 1500})
+        this.refreshNotes()
+      } else {
+        this.messageService.error(res.message, { nzDuration: 2500 })
+      }
+    })
+  }
+
+  showDeleteCategoryConfirm(): void {
+    const currentCategory = this.categoryService.selectedCategory
+    this.modalService.confirm({
+      nzTitle: 'Are you sure to delete this category?',
+      nzContent: `<b style="color: red;">${currentCategory.name}</b>`,
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: () => this.deleteCategory(currentCategory),
+      nzCancelText: 'No',
+      nzOnCancel: () => {}
+    });
+  }
+
+  deleteCategory(category: Category): void {
+    this.categoryService.deleteCategory(category, this.username).subscribe(res => {
+      if (res.success) {
+        this.messageService.success(`Category ${category.name} has been deleted`, { nzDuration: 1500})
+        this.categoryService.initializeCategories()
+        this.categoryService.setCategory(this.categories[0])
         this.refreshNotes()
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })

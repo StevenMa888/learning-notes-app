@@ -47,4 +47,8 @@ export class CategoryService {
       this.setCategories(categories)
     })
   }
+
+  deleteCategory(category: Category, username: string): Observable<any> {
+    return this.http.delete('/api/categories/' + category._id, { params: { username } })
+  }
 }

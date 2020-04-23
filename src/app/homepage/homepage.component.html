@@ -6,7 +6,7 @@
 					<textarea nz-input [(ngModel)]="note.content" (change)="showModalUpdate(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
 				</nz-card>
 				<ng-template #extraTemplate>
-					<button (click)="showDeleteConfirm(note)" class="delete-card"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
+					<button (click)="showDeleteNoteConfirm(note)" class="delete-card"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
 				</ng-template>
 			</div>
 			<div nz-col [nzSpan]="12" class="card-wrapper">
@@ -59,5 +59,16 @@
 		>
 			<input nz-input [(ngModel)]="modalContentAddCategory" placeholder="Your category name">
 		</nz-modal>
+		<div class="delete-category">
+			<button
+				style="position: absolute"
+				nz-button
+				nzType="primary"
+				nzBlock
+				(click)="showDeleteCategoryConfirm()"
+			>
+				Delete This Category
+			</button>
+		</div>
 	</div>
 </div>
