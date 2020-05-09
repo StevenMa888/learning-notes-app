@@ -8,13 +8,13 @@ const sd = require("silly-datetime")
 const fs = require('fs')
 
 mongoose.Promise = Promise
-mongoose.connect('mongodb://localhost:27017/learning_notes').then(() => {console.log("Mongoose is up!")})
+mongoose.connect('mongodb://localhost:27017/learning_notes', {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {console.log("Mongoose is up!")})
 
 const User = require('./models/user')
 const Note = require('./models/note')
 const Category = require('./models/category')
 
-app.use(session({secret: 'my-secret-is-good', resave: false, saveUninitialized: true}))
+app.use(session({secret: 'my-secret-is-good', resave: false, rolling: true, saveUninitialized: true}))
 app.use(express.static('public'))
 app.use(bodyParser.json())
 
@@ -287,6 +287,9 @@ app.post('/api/avatar', async (req, res, next) => {
 
 app.get('/api/avatar', async function (req, res) {
     const username = req.query.username
+    if (username == null || username == '' || username == 'null') {
+        return res.json(null)
+    }
     const user = await User.findOne({username})
     res.sendFile(__dirname + "/" + user.avatarUrl)
 })
