@@ -9,8 +9,6 @@ import { Observable, Observer } from 'rxjs'
   styleUrls: ['./user.component.less']
 })
 export class UserComponent implements OnInit {
-
-  username: Object
   loading: boolean = false
   avatarUrl: string | undefined = ''
   previewVisible = false
@@ -23,12 +21,10 @@ export class UserComponent implements OnInit {
     hidePreviewIconInNonImage: true
   }
 
-  constructor(private user: UserService, private msg: NzMessageService) {
-    this.username = {username: user.getUsername()}
-    this.avatarUrl = "" //user.getAvatar()
-  }
+  constructor(private user: UserService, private msg: NzMessageService) { }
 
   ngOnInit() {
+    this.avatarUrl = "" //user.getAvatar()
   }
   beforeUpload = (file: File) => {
     return new Observable((observer: Observer<boolean>) => {

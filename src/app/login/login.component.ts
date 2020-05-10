@@ -9,10 +9,16 @@ import { UserService } from '../user.service';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
+  rememberMe: boolean
+  initialRememberMe: boolean
+  initialUsername: string
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
+    this.initialRememberMe = localStorage.getItem('rememberMe') == 'true'
+    this.rememberMe = this.initialRememberMe
+    this.initialUsername = this.userService.getUsernameInLocalStorage()
   }
 
   loginUser(event) {
@@ -21,6 +27,7 @@ export class LoginComponent implements OnInit {
     const username = target.querySelector('#username').value
     const password = target.querySelector('#password').value
     this.auth.loginUser(username, password)
+    localStorage.setItem('rememberMe', this.rememberMe.toString())
   }
 
 }

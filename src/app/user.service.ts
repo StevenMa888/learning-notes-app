@@ -6,11 +6,11 @@ import { of, Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-
+  currentUsername: string
   avatarSub = new Subject<Blob>()
   avatarObservable = this.avatarSub.asObservable()
 
-  getUsername() {
+  getUsernameInLocalStorage() {
     return localStorage.getItem("username")
   }
 
@@ -19,37 +19,42 @@ export class UserService {
   }
 
   getIsLoggedIn(): Observable<any> {
-    if (!this.getUsername()) return of(false)
+    if (!this.currentUsername) return of(false)
     return this.http.post('/api/isLoggedIn', {
-      username: this.getUsername()
+      username: this.currentUsername
     })
   }
 
   setLoggedInUser(username: string): void {
     localStorage.setItem('username', username)
+    this.currentUsername = username
   }
 
   removeLoggedInUser(): void {
-    localStorage.removeItem('username')
+    // localStorage.removeItem('username')
+    this.currentUsername = null
   }
 
   logout(): Observable<any> {
     return this.http.post('/api/logout', {
-      username: this.getUsername()
+      username: this.currentUsername
     })
   }
 
   getAvatar(): Observable<Blob> {
+    if (this.currentUsername == null) {
+      return of(null)
+    }
     return this.http.get('/api/avatar', { 
       params: {
-        username: this.getUsername() 
+        username: this.currentUsername
       },
       responseType: 'blob'
     })
   }
 
   setAvatar(formData: FormData): Observable<any> {
-    formData.append('username', this.getUsername())
+    formData.append('username', this.currentUsername)
     return this.http.post('/api/avatar', formData)
   }
 

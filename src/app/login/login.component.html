@@ -9,17 +9,17 @@
 		</h4>
 		<div>
 			<form (submit)="loginUser($event)">
-			<div class="input-prepend"><fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username"></div> 
-			<div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"></div>
-			
-			<div class="remember-button">
-				<input type="checkbox" value="true" checked="checked">
-				<span>Remember Me</span>
-			</div>
-			<div class="forget-button">
-				<a>Having problem to login?</a>
-			</div>
-			<input type="submit" class="login-button" value="LOGIN">
+				<div class="input-prepend"><fa-icon icon="user"></fa-icon><input type="text" id="username" placeholder="username" [ngModel]="initialRememberMe? initialUsername : ''" name="username"></div> 
+				<div class="input-prepend"><fa-icon icon="lock"></fa-icon><input type="password" id="password" placeholder="password"></div>
+				
+				<div class="remember-button">
+					<input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+					<span>Remember Me</span>
+				</div>
+				<div class="forget-button">
+					<a>Having problem to login?</a>
+				</div>
+				<input type="submit" class="login-button" value="LOGIN">
 			</form>
 		</div>
 	</div>

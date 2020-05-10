@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { UserService } from '../user.service';
 import { NoteService, Note } from '../note.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Category, CategoryService } from '../category.service';
 
@@ -13,7 +13,7 @@ import { Category, CategoryService } from '../category.service';
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.less']
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent implements OnInit, OnDestroy {
 
   username: string
   notes: Array<Note>
@@ -28,35 +28,36 @@ export class HomepageComponent implements OnInit {
   modalCategoryAdd: string
   modalContentAdd: string
   isVisibleAddCategory: boolean
+  isModalCategoryAddDropdownOpen: boolean
   isOkLoadingAddCategory: boolean
   modalContentAddCategory: string
   categories: Array<Category>
+  categoriesSubscription: Subscription
+  categorySubscription: Subscription
 
   constructor(private userService: UserService, private categoryService: CategoryService,
     private noteService: NoteService, private messageService: NzMessageService,
     private modalService: NzModalService, private router: Router
-  ) {
-    this.username = userService.getUsername()
-    categoryService.categoriesObservable.subscribe(categories => {
-      if (categories == null) return // disregard initial value null
+  ) { }
+
+  ngOnInit() {
+    this.username = this.userService.currentUsername
+    this.categoriesSubscription = this.categoryService.categoriesObservable.subscribe(categories => {
       this.categories = categories
-      if (categoryService.selectedCategory  == null) {
-        categoryService.setCategory(this.categories[0])
-      } else {
-        this.refreshNotes()
-      }
     })
-    categoryService.categoryObservable.subscribe(category => {
+    this.categorySubscription = this.categoryService.categoryObservable.subscribe(category => {
       this.categoryService.selectedCategory = category
+      if (category == null) {
+        this.modalCategoryAdd = null
+        this.notes = []
+        return
+      }
       this.modalCategoryAdd = category.name
       this.refreshNotes()
     })
     if (this.notes == null && this.categoryService.selectedCategory != null) {
-      categoryService.setCategory(this.categoryService.selectedCategory)
+      this.categoryService.setCategory(this.categoryService.selectedCategory)
     }
-  }
-
-  ngOnInit() {
   }
 
   refreshNotes() {
@@ -134,6 +135,7 @@ export class HomepageComponent implements OnInit {
 
   showModalAddCategory(): void {
     this.modalContentAddCategory = ""
+    this.isModalCategoryAddDropdownOpen = false
     this.isVisibleAddCategory = true
   }
 
@@ -147,8 +149,9 @@ export class HomepageComponent implements OnInit {
         this.messageService.success('New category added', { nzDuration: 1500 })
         this.categoryService.getCategories(this.username).subscribe(categories => {
           this.categoryService.setCategories(categories)
+          this.categoryService.setCategory(categories[categories.length - 1])
+          this.refreshNotes()
         })
-        this.refreshNotes()
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
@@ -186,6 +189,9 @@ export class HomepageComponent implements OnInit {
 
   showDeleteCategoryConfirm(): void {
     const currentCategory = this.categoryService.selectedCategory
+    if (currentCategory == null) {
+      this.messageService.error('There is no category to delete!')
+    }
     this.modalService.confirm({
       nzTitle: 'Are you sure to delete this category?',
       nzContent: `<b style="color: red;">${currentCategory.name}</b>`,
@@ -202,8 +208,6 @@ export class HomepageComponent implements OnInit {
       if (res.success) {
         this.messageService.success(`Category ${category.name} has been deleted`, { nzDuration: 1500})
         this.categoryService.initializeCategories()
-        this.categoryService.setCategory(this.categories[0])
-        this.refreshNotes()
       } else {
         this.messageService.error(res.message, { nzDuration: 2500 })
       }
@@ -214,4 +218,9 @@ export class HomepageComponent implements OnInit {
     return value == null || value == ''
   }
 
+  @HostListener('unloaded')
+  ngOnDestroy(): void {
+    this.categoriesSubscription.unsubscribe()
+    this.categorySubscription.unsubscribe()
+  }
 }
