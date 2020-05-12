@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,15 +13,14 @@ export class AppComponent {
   logo: string
   isLoggedIn: boolean
 
-  constructor(private auth: AuthService) {
+  constructor(private authService: AuthService, private userService: UserService) {
     this.logo = "Learning Notes"
-    this.auth.getIsLoggedIn().subscribe(isLoggedIn => {
-      if (isLoggedIn == null) return // disregard initial value null
+    this.authService.getIsLoggedIn().subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn
     })
   }
 
   getIsLoggedIn() {
-    return localStorage.getItem("username") != null && this.isLoggedIn
+    return this.userService.currentUsername != null && this.isLoggedIn
   }
 }
