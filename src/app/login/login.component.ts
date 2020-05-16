@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.initialRememberMe = localStorage.getItem('rememberMe') == 'true'
     this.rememberMe = this.initialRememberMe
-    this.initialUsername = this.userService.currentUsername
+    this.initialUsername = this.userService.getUsernameInLocalStorage()
   }
 
   loginUser(event) {

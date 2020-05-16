@@ -5,22 +5,30 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './auth.guard';
 import { HomepageComponent } from './homepage/homepage.component';
 import { UserComponent } from './user/user.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomepageComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'user',
     component: UserComponent,
     canActivate: [AuthGuard]
   }, {
-    path: '',
-    component: HomepageComponent,
-    canActivate: [AuthGuard]
+    path: '**',
+    component: PageNotFoundComponent
   }
 ];
 

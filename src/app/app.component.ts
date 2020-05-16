@@ -15,7 +15,7 @@ export class AppComponent {
 
   constructor(private authService: AuthService, private userService: UserService) {
     this.logo = "Learning Notes"
-    this.authService.getIsLoggedIn().subscribe(isLoggedIn => {
+    this.authService.isLoggedInObservable.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn
     })
   }

@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router) { }
 
   ngOnInit() {
-    this.categoryService.initializeCategories()
     this.avatarUrl = this.userService.avatarObservable.pipe(map(blob => {
       const url = URL.createObjectURL(blob)
       return this.sanitizer.bypassSecurityTrustResourceUrl(url)
@@ -41,6 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.categorySubscription = this.categoryService.categoryObservable.subscribe(category => {
       this.selectedCategory = category
     })
+    this.categoryService.initializeCategories()
   }
 
   logoutUser(): void {

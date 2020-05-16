@@ -17,12 +17,9 @@ export class CategoryService {
   categoryObservable = this.categorySub.asObservable()
   private categoriesSub = new Subject<Array<Category>>()
   categoriesObservable = this.categoriesSub.asObservable()
-  categories: Category[]
   selectedCategory: Category
 
-  constructor(private http: HttpClient, private userService: UserService) {
-    this.initializeCategories()
-  }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   addCategory(category: Category): Observable<any> {
     return this.http.post('/api/categories', category)
@@ -43,9 +40,14 @@ export class CategoryService {
 
   initializeCategories(): void {
     this.getCategories(this.userService.currentUsername).subscribe(categories => {
-      this.categories = categories
       this.setCategories(categories)
       this.setCategory(categories[0])
+    })
+  }
+
+  refreshCategories(): void {
+    this.getCategories(this.userService.currentUsername).subscribe(categories => {
+      this.setCategories(categories)
     })
   }
 

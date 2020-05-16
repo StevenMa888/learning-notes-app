@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 
@@ -13,19 +13,15 @@ interface isLoggedIn {
 })
 export class AuthService {
 
-  private isLoggedInSub = new BehaviorSubject<boolean>(null)
+  private isLoggedInSub = new Subject<boolean>()
   isLoggedInObservable = this.isLoggedInSub.asObservable()
 
   constructor(private http: HttpClient, private user: UserService, private router: Router) {
     this.initializeIsLoggedIn()
   }
 
-  getIsLoggedInOnce(): Observable<any> {
-    return this.user.getIsLoggedIn()
-  }
-
   getIsLoggedIn(): Observable<any> {
-    return this.isLoggedInObservable
+    return this.user.getIsLoggedIn()
   }
 
   setIsLoggedIn(isLoggedIn: boolean): void {

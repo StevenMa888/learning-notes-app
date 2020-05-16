@@ -8,7 +8,7 @@
 				<li nz-submenu>
 					<span title><i nz-icon type="appstore"></i> Category</span>
 					<ul>
-						<li nz-menu-item (click)="setCategory(c)" [nzSelected]="selectedCategory == c"
+						<li nz-menu-item (click)="setCategory(c)" [nzSelected]="selectedCategory.name == c.name"
 							*ngFor="let c of categories">
 							{{c.name}}
 						</li>

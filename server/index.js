@@ -138,6 +138,10 @@ app.delete('/api/notes/:id', async (req, res) => {
 
 app.post('/api/categories', async (req, res) => {
     const {name, username} = req.body
+    if (await Category.findOne({name, username})) {
+        res.json({success: false, message: 'Category already exists!'})
+        return
+    }
     const category = new Category({
        name,
        username

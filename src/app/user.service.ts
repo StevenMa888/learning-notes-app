@@ -19,11 +19,11 @@ export class UserService {
     this.refreshAvatar()
   }
 
-  getIsLoggedIn(): Observable<any> {
+  getIsLoggedIn(): Observable<boolean> {
     if (!this.currentUsername) {
       return of(false)
     }
-    return this.http.post('/api/isLoggedIn', {
+    return this.http.post<boolean>('/api/isLoggedIn', {
       username: this.currentUsername
     })
   }

@@ -56,6 +56,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
       this.refreshNotes()
     })
     if (this.notes == null && this.categoryService.selectedCategory != null) {
+      this.categoryService.refreshCategories()
       this.categoryService.setCategory(this.categoryService.selectedCategory)
     }
   }
