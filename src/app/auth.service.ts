@@ -38,7 +38,6 @@ export class AuthService {
     this.checkUser(username, password).subscribe(data => {
       if (data.success) {
         this.user.setLoggedInUser(username)
-        this.user.refreshAvatar()
         this.setIsLoggedIn(true)
         this.router.navigate([''])
       } else {

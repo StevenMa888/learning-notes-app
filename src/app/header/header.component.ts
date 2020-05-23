@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.selectedCategory = category
     })
     this.categoryService.initializeCategories()
+    this.userService.refreshAvatar()
   }
 
   logoutUser(): void {

@@ -16,7 +16,6 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     this.currentUsername = this.getUsernameInLocalStorage()
-    this.refreshAvatar()
   }
 
   getIsLoggedIn(): Observable<boolean> {

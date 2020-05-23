@@ -98,6 +98,10 @@ export class UserComponent implements OnInit {
   }
 
   handleUpload(): void {
+    if (this.fileList.length == 0) {
+      this.msg.error("Please select an avatar to upload!")
+      return
+    }
     const formData = new FormData()
     const file: File = this.fileList[0].originFileObj
     formData.append('avatar', file)
