@@ -32,6 +32,7 @@ export class CategoryService {
   setCategory(category: Category): void {
     this.selectedCategory = category
     this.categorySub.next(category)
+    localStorage.setItem("category", category == null ? null : category.name)
   }
 
   setCategories(categories: Array<Category>): void {
@@ -41,7 +42,12 @@ export class CategoryService {
   initializeCategories(): void {
     this.getCategories(this.userService.currentUsername).subscribe(categories => {
       this.setCategories(categories)
-      this.setCategory(categories[0])
+      if (localStorage.getItem("category")) {
+        const lastVisitedCategory = categories.find(c => c.name == localStorage.getItem("category"))
+        this.setCategory(lastVisitedCategory)
+      } else {
+        this.setCategory(categories[0])
+      }
     })
   }
 

@@ -51,6 +51,7 @@ export class AuthService {
       if (res.success) {
         this.user.removeLoggedInUser()
         this.setIsLoggedIn(false)
+        localStorage.removeItem("category")
         this.router.navigate(['login'])
       } else {
         alert(res.message)
