@@ -1,29 +1,15 @@
 # Learning Notes App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+Learning Notes App is a neat web app to write and manage your notes.
 
-## Development server
+## Running the app
 
-Run `ng serve` for a frontend webpack dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the frontend source files.
+Run `npm install` to install frontend depedencies.
 
-Go to /server, run `nodemon index.js` for a backend node dev server at `http://localhost:1234/`. The app will automatically reload if you change any of the backend source files.
+Go to /server, run `npm install` to install backend depedencies.
 
-## Code scaffolding
+Run `mongod` to start MongoDB, create a database and tables based on /server/models.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Go to /server, run `nodemon` to start a backend node dev server at `http://localhost:1234/`. The backend server will automatically reload if you change any of the backend source files.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Run `npm start` to launch a frontend app running on webpack dev server. Navigate to `http://localhost:4200/`. The frontend app will automatically reload if you change any of the frontend source files.
