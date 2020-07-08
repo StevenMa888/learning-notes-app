@@ -3,7 +3,12 @@
 		<div nz-row [nzGutter]="30" class="note-container">
 			<div *ngFor="let note of notes" nz-col [nzSpan]="12" class="note-wrapper">
 				<nz-card [nzTitle]="note.title" [nzExtra]="extraTemplate">
-					<textarea nz-input [(ngModel)]="note.content" (change)="showModalUpdate(note)" [nzAutosize]="{ minRows: 2, maxRows: 60 }" placeholder="Write your notes here">></textarea>
+					<app-tiny-editor
+						[content]="note.content"
+						(focus)="focusNote(note)"
+						(contentChange)="showModalUpdate(note, $event)"
+						(contentChanged)="setUnsavedNote(note, $event)">
+					</app-tiny-editor>
 				</nz-card>
 				<ng-template #extraTemplate>
 					<button (click)="showDeleteNoteConfirm(note)" class="delete-card"><i nz-icon nzType="delete" nzTheme="outline"></i></button>

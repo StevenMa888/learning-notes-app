@@ -18,6 +18,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   username: string
   notes: Array<Note>
   currentNote: Note
+  unsavedNote: Note
   isVisibleUpdate: boolean
   isOkLoadingUpdate: boolean
   modalTitleUpdate: string
@@ -69,10 +70,25 @@ export class HomepageComponent implements OnInit, OnDestroy {
     })
   }
 
-  showModalUpdate(note: Note): void {
+  focusNote(note) {
+    if (this.unsavedNote != null && this.unsavedNote != note) {
+      this.showModalUpdate(this.unsavedNote, this.unsavedNote.content)
+    }
+  }
+
+  setUnsavedNote(note: Note, content: string) {
+    if (content == null) {
+      this.unsavedNote = null
+    } else {
+      this.unsavedNote = note
+      this.unsavedNote.content = content
+    }
+  }
+
+  showModalUpdate(note: Note, content: string): void {
     this.currentNote = note
     this.modalTitleUpdate = `Save changes to "${note.title}?"`
-    this.modalContentUpdate = note.content
+    this.modalContentUpdate = content
     this.isVisibleUpdate = true
   }
 

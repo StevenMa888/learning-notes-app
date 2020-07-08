@@ -1,0 +1,9 @@
+<editor
+    [init]="config"
+    [(ngModel)]="content"
+    [ngClass]="{'highlight': hasChanges}"
+    (onFocusIn)="onFocusIn()"
+    (onFocusOut)="checkContentChange()">
+</editor>
+<button nz-button *ngIf="hasChanges" (click)="emitContentChange()">Save</button>
+<button nz-button *ngIf="hasChanges" (click)="cancelChange()">Cancel</button>

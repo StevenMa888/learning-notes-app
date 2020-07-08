@@ -20,6 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { TinyEditorComponent } from './tiny-editor/tiny-editor.component';
 
 registerLocaleData(en);
 
@@ -31,7 +33,8 @@ registerLocaleData(en);
     HomepageComponent,
     HeaderComponent,
     UserComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    TinyEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ registerLocaleData(en);
     FontAwesomeModule,
     NgZorroAntdModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    EditorModule
   ],
   providers: [AuthGuard, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
